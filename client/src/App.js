@@ -9,6 +9,8 @@ import { getDefaultNormalizer } from '@testing-library/react';
 function App() {
 
   var [data, setData] = useState([]);
+  var [page, setPage] = useState(1);
+  var [results, setResults] = useState(10);
 
   const changeSortOrder = (sortOrder) => {
     let urls = data;
@@ -36,7 +38,36 @@ function App() {
     })
     .catch(console.log)
   };
+
+  const changeResultCount = (rc) => {
+    setResults(rc);
+    changePage(1, rc);
+  }
+
+  const changePage = (page, results) => {
+    let previous = document.getElementById("previous");
+    let next = document.getElementById("next");
+    previous.classList.remove("disabled");
+    next.classList.remove("disabled");
+    let last = data.length % results > 0 ? ((data.length - data.length % results)/ results) + 1 : data.length / results;
+    if (page == 1) {
+      previous.classList.add("disabled");
+    }
+    if (page === last) {
+      next.classList.add("disabled");
+    }
+    setPage(page);
+  }
   
+  const getPages = () => {
+    let pageTabs = [];
+    let total = data.length % results > 0 ? ((data.length - data.length % results) / results) + 1 : data.length / results;
+    for (let i = 1; i <= total; i++) {
+      pageTabs.push(<li class="page-item" onClick={() => changePage(i, results)}><a class="page-link" href="#" key={i}>{i}</a></li>)
+    }
+    return pageTabs;
+  }
+
   return (
     <div className='container mt-5'>
 <div className='container mt-5'>
@@ -69,13 +100,26 @@ function App() {
                       <li><a class="dropdown-item" href="#" onClick={() => changeSortOrder(3)}>Most Visited</a></li>
                       </ul>
                   </div>
-          </div>
+            </div>
+            <div class="col-md-2 mt-4">
+                  <div class="btn-group">
+                      <button type="button" class="btn btn-primary">Results per page</button>
+                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span class="visually-hidden"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#" onClick={() => changeResultCount(10)}>10</a></li>
+                      <li><a class="dropdown-item" href="#" onClick={() => changeResultCount(15)}>15</a></li>
+                      <li><a class="dropdown-item" href="#" onClick={() => changeResultCount(20)}>20</a></li>
+                      </ul>
+                  </div>
+            </div>
   </div>
           <hr/>
           <div class="row">
               <div class="col-md-1"></div>
               <div class="col-md-6" id="box">
-                <SearchResultList list={data} />
+                <SearchResultList list={data.slice((page - 1) * results, (page * results) > data.length ? data.length : (page * results))} />
               </div>
                 <br/>
                 <br/>
@@ -86,14 +130,12 @@ function App() {
                       <div class="col-md-6" id="box">
                   <nav aria-label="Page navigation example">
                       <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                          <a class="page-link" href="#" tabIndex="-1">Previous</a>
+                        <li id="previous" class="page-item disabled">
+                          <a class="page-link" onClick={() => changePage(page - 1, results)} href="#" tabIndex="-1">Previous</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                          <a class="page-link" href="#">Next</a>
+                        {getPages()}
+                        <li id="next" class="page-item">
+                          <a class="page-link" onClick={() => changePage(page + 1, results)} href="#">Next</a>
                         </li>
                       </ul>
                     </nav>
