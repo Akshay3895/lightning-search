@@ -36,6 +36,6 @@ const searchGoogle = async (searchQuery,pagenumber) => {
 };
 
 // To test the function 
-// searchGoogle("amazon",5)
+// searchGoogle("facebook",0)
 
 module.exports = searchGoogle;

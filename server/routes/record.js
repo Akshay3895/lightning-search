@@ -1,5 +1,6 @@
 const express = require("express");
 const searchGoogle = require("../crawler/searchGoogle")
+const helperFunctions = require("../helper/helper")
 
 // recordRoutes is an instance of the express router.
 // We use it to define our routes.
@@ -8,6 +9,7 @@ const recordRoutes = express.Router();
 
 // This will help us connect to the database
 const dbo = require("../db/conn");
+const { getCurrentTime } = require("../helper/helper");
 
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;   
@@ -39,10 +41,12 @@ recordRoutes.route("/updateurl").get(async function (req, res) {
     input_address = req.query.address
     const filter = { address: input_address };
     
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
+    // var today = new Date();
+    // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    // var dateTime = date+' '+time;
+
+    var dateTime = helperFunctions.getCurrentTime();
 
     const updateDoc = {
         $inc: {
@@ -59,6 +63,7 @@ recordRoutes.route("/updateurl").get(async function (req, res) {
 });
 
 recordRoutes.route("/record").get(function (req, res) {
+
     let db_connect = dbo.getDb("main");
     db_connect
       .collection("invertedindex")
@@ -69,8 +74,6 @@ recordRoutes.route("/record").get(function (req, res) {
       });
 
   });
-
-
 
   recordRoutes.route("/search").post(async function (req, res) {
     
@@ -110,10 +113,12 @@ recordRoutes.route("/record").get(function (req, res) {
                     // Data to be pushed into URLs collection
                     url_list = temp_data.map(searchresult => searchresult.address)
 
-                    var today = new Date();
-                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    var dateTime = date+' '+time;
+                    // var today = new Date();
+                    // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    // var dateTime = date+' '+time;
+
+                    var dateTime = helperFunctions.getCurrentTime();
 
                     url_list = url_list.map((url)=>{
                         return {"address":url,"timesVisited":1,"lastVisited": dateTime}

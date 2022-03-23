@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SearchResultList from './components/SearchResultList';
 import { useEffect, useState } from 'react';
 import { getDefaultNormalizer } from '@testing-library/react';
-
+const axios = require("axios")
 
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   var [data, setData] = useState([]);
   var [page, setPage] = useState(1);
   var [results, setResults] = useState(10);
+  var [searchItem, setsearchItem] = useState("");
 
   const changeSortOrder = (sortOrder) => {
     let urls = data;
@@ -26,17 +27,24 @@ function App() {
   };
 
   const getData = () => {
-    fetch('output.json', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
-    .then(result => result.json())
-    .then((urls) => {
-      setData(urls);
-    })
-    .catch(console.log)
+    
+    axios.post('http://localhost:5000/search/',{searchquery:searchItem}).then(response =>{
+        
+          setData(response.data);
+    
+      }).catch(console.log)
+    // Can be used for testing the frontend
+    // fetch('output.json', {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json'
+    //   }
+    // })
+    // .then(result => result.json())
+    // .then((urls) => {
+    //   setData(urls);
+    // })
+    // .catch(console.log)
   };
 
   const changeResultCount = (rc) => {
@@ -63,79 +71,86 @@ function App() {
     let pageTabs = [];
     let total = data.length % results > 0 ? ((data.length - data.length % results) / results) + 1 : data.length / results;
     for (let i = 1; i <= total; i++) {
-      pageTabs.push(<li class="page-item" onClick={() => changePage(i, results)}><a class="page-link" href="#" key={i}>{i}</a></li>)
+      pageTabs.push(<li key={"page_"+i} className="page-item" onClick={() => changePage(i, results)}><a className="page-link" href="#" key={i}>{i}</a></li>)
     }
     return pageTabs;
   }
 
+  const getSearchInputValue = (event) =>{
+
+      const userValue = event.target.value;
+      setsearchItem(userValue);
+      // console.log("Input", userValue);
+  };
+
   return (
     <div className='container mt-5'>
 <div className='container mt-5'>
-<div class="container-fluid">
-      <div class="row">
-          <div class="col-md-1">
-              <img src="logo.jpeg" class="img" alt="..." width="100" height="100" />
+<div className="container-fluid">
+      <div className="row">
+          <div className="col-md-1">
+              <img src="logo.jpeg" className="img" alt="..." width="100" height="100" />
               </div>
-              <div class="col-md-6 mt-4">
-                  <div class="input-group mb-3">
+              <div className="col-md-6 mt-4">
+                  <div className="input-group mb-3">
                   
-                  <input id="search-focus" type="search" class="form-control" placeholder="Search"/>
-                  <div class="input-group-append">
-                      <button type="button" class="btn btn-primary" onClick={() => getData()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <input id="search-focus" type="search" className="form-control" onChange={getSearchInputValue} placeholder="Search"/>
+                  <div className="input-group-append">
+                      <button type="button" className="btn btn-primary" onClick={() => getData()}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
                           <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                         </svg>
                       </button>
                   </div>
                 </div>
               </div>
-              <div class="col-md-2 mt-4">
-                  <div class="btn-group">
-                      <button type="button" class="btn btn-primary">Sort By</button>
-                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span class="visually-hidden"></span>
+              <div className="col-md-2 mt-4">
+                  <div className="btn-group">
+                      <button type="button" className="btn btn-primary">Sort By</button>
+                      <button type="button" className="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span className="visually-hidden"></span>
                       </button>
-                      <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#" onClick={() => changeSortOrder(1)}>Alphabetically</a></li>
-                      <li><a class="dropdown-item" href="#" onClick={() => changeSortOrder(2)}>Most Recent</a></li>
-                      <li><a class="dropdown-item" href="#" onClick={() => changeSortOrder(3)}>Most Visited</a></li>
+                      <ul className="dropdown-menu">
+                      <li><a className="dropdown-item" href="#" onClick={() => changeSortOrder(1)}>Alphabetically</a></li>
+                      <li><a className="dropdown-item" href="#" onClick={() => changeSortOrder(2)}>Most Recent</a></li>
+                      <li><a className="dropdown-item" href="#" onClick={() => changeSortOrder(3)}>Most Visited</a></li>
                       </ul>
                   </div>
             </div>
-            <div class="col-md-2 mt-4">
-                  <div class="btn-group">
-                      <button type="button" class="btn btn-primary">Results per page</button>
-                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span class="visually-hidden"></span>
+            <div className="col-md-2 mt-4">
+                  <div className="btn-group">
+                      <button type="button" className="btn btn-primary">Results per page</button>
+                      <button type="button" className="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span className="visually-hidden"></span>
                       </button>
-                      <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#" onClick={() => changeResultCount(10)}>10</a></li>
-                      <li><a class="dropdown-item" href="#" onClick={() => changeResultCount(15)}>15</a></li>
-                      <li><a class="dropdown-item" href="#" onClick={() => changeResultCount(20)}>20</a></li>
+                      <ul className="dropdown-menu">
+                      <li><a className="dropdown-item" href="#" onClick={() => changeResultCount(10)}>10</a></li>
+                      <li><a className="dropdown-item" href="#" onClick={() => changeResultCount(15)}>15</a></li>
+                      <li><a className="dropdown-item" href="#" onClick={() => changeResultCount(20)}>20</a></li>
                       </ul>
                   </div>
             </div>
   </div>
           <hr/>
-          <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-6" id="box">
+          <div className="row">
+              <div className="col-md-1"></div>
+              <div className="col-md-6" id="box">
                 <SearchResultList list={data.slice((page - 1) * results, (page * results) > data.length ? data.length : (page * results))} />
               </div>
                 <br/>
                 <br/>
                   </div>
                   <hr/>
-                  <div class="row">
-                      <div class="col-md-1"></div>
-                      <div class="col-md-6" id="box">
+                  <div className="row">
+                      <div className="col-md-1"></div>
+                      <div className="col-md-6" id="box">
                   <nav aria-label="Page navigation example">
-                      <ul class="pagination justify-content-center">
-                        <li id="previous" class="page-item disabled">
-                          <a class="page-link" onClick={() => changePage(page - 1, results)} href="#" tabIndex="-1">Previous</a>
+                      <ul className="pagination justify-content-center">
+                        <li id="previous" className="page-item disabled">
+                          <a className="page-link" onClick={() => changePage(page - 1, results)} href="#" tabIndex="-1">Previous</a>
                         </li>
                         {getPages()}
-                        <li id="next" class="page-item">
-                          <a class="page-link" onClick={() => changePage(page + 1, results)} href="#">Next</a>
+                        <li id="next" className="page-item">
+                          <a className="page-link" onClick={() => changePage(page + 1, results)} href="#">Next</a>
                         </li>
                       </ul>
                     </nav>
