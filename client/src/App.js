@@ -29,7 +29,7 @@ function App() {
   const getData = () => {
     
     axios.post('http://localhost:5000/search/',{searchquery:searchItem}).then(response =>{
-        
+          console.log(response.data)
           setData(response.data);
     
       }).catch(console.log)

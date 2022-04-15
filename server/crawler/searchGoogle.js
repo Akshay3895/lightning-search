@@ -5,7 +5,7 @@ const searchGoogle = async (searchQuery,pagenumber) => {
     const page = await browser.newPage();
     
     await page.goto(`https://www.google.com/search?q=${searchQuery}&start=${pagenumber*10}&tbs=li:1`)
-    console.log(`https://www.google.com/search?q=${searchQuery}&start=${pagenumber*10}&tbs=li:1`)
+    
     // Selector class keeps changing need to check google for correct div
     await page.waitForSelector('div[class="jtfYYd"]');
 
