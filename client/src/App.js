@@ -78,29 +78,20 @@ function App() {
   }
 
   const getSearchInputValue = (event) =>{
-      var arr=["alibaba", "aliexpress", "youtube","facebook","whatsapp web","whatsapp","netflix","spider deathly?","roblox","amazon","hotmail","zoom",
-               "google","gmail","olympics","andrew cuomo","amazon customer service", "amazon forest","cute spider","godzilla vs kong","american airlines",
-               "25th amendment","in the heights","black friday deals","walmart covid vaccine","walmart ps5","amazon jobs","spider man","india covid",
-               "amazon prime video", "walgreens covid vaccine","amazon prime","spider images","cvs vaccine","macy’s","bestbuy","macy","cvs covid vaccine",
-               "kohls","cvs vaccine appointment","airpods pro","amc","amazon net worth","elon musk","Spider","cuba","spider man no way home","amazon fresh",
-               "amazon fire stick","amazon rainforest","amazon forest fire","amazon forest animals","amazon forest deforestation","amazon forest is in which country", 
-               "amazon forest tour","ondrive","outlook","onedrive login","omicron symptoms","oops!","ookla speed test","ooad","ooa","ooak meaning","ooak",
-               "ooak dolls","ooad concepts","ooama","ooahh slide sandal","oats","oat milk","ooad","utd","ooad principles","ooad methodology","ooad interview questions",
-               "ooad design patterns","ooad definition","apple","airbnb","apartments","apartments near me","atmos energy","american eagle","american express","alert",
-               "orange","open source","otama","oden","ball","bone"]
+      var arr=["alibaba", "aliexpress", "youtube","facebook","whatsapp","netflix","spider","roblox","amazon","hotmail","zoom",
+               "google","gmail","olympics","andrewCuomo","cute spider","godzilla vs kong","macy’s","bestbuy","macy",
+               "kohls","amc","Spider","cuba","ondrive","outlook","oops!","ooad","ooa","ooak",
+               "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone"]
       const userValue = event.target.value; /*return the element that triggered the event*/
       
       // console.log("Input", userValue);
      /*function executed on text field field input*/
       userValue.addEventListener("input", function(e) {
-         var divCreate,
-         b,
-         i,
+         var divCreate,b,i,
          fieldVal = this.value;
          closeAllLists();
          if (!fieldVal) 
          {
-           
             return false;
          }
          currentFocus = -1;
@@ -110,9 +101,9 @@ function App() {
          divCreate.setAttribute("id", this.id + "autocomplete-list");
          divCreate.setAttribute("class", "autocomplete-items");
          this.parentNode.appendChild(divCreate);
-         for (i = 0; i <arr.length; i++) 
+         for (var x = 0; x <arr.length; ++) 
          { /*check for elements that start with the same element as the target element*/
-            if ( arr[i].substr(0, fieldVal.length).toUpperCase() == fieldVal.toUpperCase() ) 
+            if ( arr[i].substr(0, fieldVal.length).toLowerCase() == fieldVal.toLowerCase() ) 
             {
               /*For every matching element create a DIV element and highlight the matching characters*/
                b = document.createElement("DIV");
@@ -161,17 +152,17 @@ function App() {
          autocomplete[currentFocus].classList.add("autocomplete-active");
       }
       function removeActive(autocomplete) {
-         for (var i = 0; i < autocomplete.length; i++) {
-            autocomplete[i].classList.remove("autocomplete-active");
+         for (var x = 0; x < autocomplete.length; x++) {
+            autocomplete[x].classList.remove("autocomplete-active");
          }
       }
       function closeAllLists(elmnt) {
          var autocomplete = document.getElementsByClassName(
             "autocomplete-items"
          );
-         for (var i = 0; i < autocomplete.length; i++) {
-            if (elmnt != autocomplete[i] && elmnt != userValue) {
-               autocomplete[i].parentNode.removeChild(autocomplete[i]);
+         for (var x = 0; x < autocomplete.length; x++) {
+            if (elmnt != autocomplete[x] && elmnt != userValue) {
+               autocomplete[x].parentNode.removeChild(autocomplete[x]);
             }
          }
       }
