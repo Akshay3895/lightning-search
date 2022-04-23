@@ -82,31 +82,47 @@ function App() {
                "google","gmail","olympics","andrewCuomo","cute spider","godzilla vs kong","macy’s","bestbuy","macy",
                "kohls","amc","Spider","cuba","ondrive","outlook","oops!","ooad","ooa","ooak",
                "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone"]
-      const userValue = event.target.value; /*return the element that triggered the event*/
+      // const userValue = event.target.value; /*return the element that triggered the event*/
+      const userValue = event.target;
+      var currentFocus = -1;
       
-      // console.log("Input", userValue);
-     /*function executed on text field field input*/
+      
+     /*function executed when input changes*/
       userValue.addEventListener("input", function(e) {
          var divCreate,b,i,
          fieldVal = this.value;
+        //  console.log("Input", fieldVal);
          closeAllLists();
          if (!fieldVal) 
          {
+            currentFocus = -1;
             return false;
          }
-         currentFocus = -1;
+         
          /*DIV element for storing values*/
+         
+        //  divCreate = document.createElement("div");
+        //  divCreate.setAttribute("id", this.id + "autocomplete-list");
+        //  divCreate.setAttribute("class", "autocomplete-items");
+        //  this.parentNode.appendChild(divCreate);
 
-         divCreate = document.createElement("DIV");
+         var rowCreate = document.createElement("div")
+         rowCreate.setAttribute("class","row")
+        //  rowCreate.style.zIndex = 4;
+         var divCreate = document.createElement("div")
          divCreate.setAttribute("id", this.id + "autocomplete-list");
-         divCreate.setAttribute("class", "autocomplete-items");
-         this.parentNode.appendChild(divCreate);
-         for (var x = 0; x <arr.length; ++) 
+         divCreate.setAttribute("class","col-md-6 autocomplete-items")
+
+         rowCreate.appendChild(divCreate)
+
+         this.parentNode.parentNode.appendChild(rowCreate); // We want col-md-6 mt-4 as the parent 
+         
+         for (var i = 0; i <arr.length; i++) 
          { /*check for elements that start with the same element as the target element*/
             if ( arr[i].substr(0, fieldVal.length).toLowerCase() == fieldVal.toLowerCase() ) 
             {
               /*For every matching element create a DIV element and highlight the matching characters*/
-               b = document.createElement("DIV");
+               b = document.createElement("div");
                b.innerHTML = "<strong>" + arr[i].substr(0, fieldVal.length) + "</strong>";
                b.innerHTML += arr[i].substr(fieldVal.length);
                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
@@ -125,20 +141,27 @@ function App() {
          var autocomplete = document.getElementById(
             this.id + "autocomplete-list"
          );
-         if (autocomplete)
+         if (autocomplete){
             autocomplete = autocomplete.getElementsByTagName("div");
-         if (e.keyCode == 40) { /*Right arrow */
+            // console.log(autocomplete) 
+          }
+         if (e.keyCode == 40) { /*Down arrow */
             currentFocus++;
+            console.log("Down",currentFocus)
             addActive(autocomplete);
          }
-         else if (e.keyCode == 38) { /*Left arrow*/
+         else if (e.keyCode == 38) { /*Up arrow*/
             currentFocus--;
+            console.log("Up",currentFocus)
             addActive(autocomplete);
          }
          else if (e.keyCode == 13) { /*Enter*/
             e.preventDefault();
             if (currentFocus > -1) {
-               if (autocomplete) autocomplete[currentFocus].click();
+               if (autocomplete) {
+                 autocomplete[currentFocus].click();
+                 console.log(currentFocus)
+               }
             }
          }
       });
@@ -146,7 +169,7 @@ function App() {
     function addActive(autocomplete) {
          if (!autocomplete) 
            return false;
-            removeActive(autocomplete);
+         removeActive(autocomplete);
          if (currentFocus >= autocomplete.length) currentFocus = 0;
          if (currentFocus < 0) currentFocus = autocomplete.length - 1;
          autocomplete[currentFocus].classList.add("autocomplete-active");
@@ -160,9 +183,14 @@ function App() {
          var autocomplete = document.getElementsByClassName(
             "autocomplete-items"
          );
+        //  autocomplete[0].parentNode.remove(); // autocomplete-items class has a parent arrow
+        //  if (autocomplete)
+         
          for (var x = 0; x < autocomplete.length; x++) {
             if (elmnt != autocomplete[x] && elmnt != userValue) {
-               autocomplete[x].parentNode.removeChild(autocomplete[x]);
+
+              //  autocomplete[x].parentNode.removeChild(autocomplete[x]);
+              autocomplete[x].parentNode.remove()
             }
          }
       }
@@ -181,7 +209,7 @@ function App() {
               <img src="logo.jpeg" className="img" alt="..." width="100" height="100" />
               </div>
               <div className="col-md-6 mt-4">
-                  <div className="input-group mb-3">
+                  <div className="input-group">
                   
                   <input id="search-focus" type="search" className="form-control" onChange={getSearchInputValue} placeholder="Search"/>
                   <div className="input-group-append">
@@ -190,7 +218,13 @@ function App() {
                         </svg>
                       </button>
                   </div>
+                  
                 </div>
+                {/* <div className="row">
+                  <div className="col-md-6" id="search-focusautocomplete-list">
+                    AKSHAY
+                  </div>
+                </div> */}
               </div>
               <div className="col-md-2 mt-4">
                   <div className="btn-group">

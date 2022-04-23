@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 } */
+
+.autocomplete-active{
+  background-color: #B2BEB5;
+}
