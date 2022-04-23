@@ -71,16 +71,105 @@ function App() {
     let pageTabs = [];
     let total = data.length % results > 0 ? ((data.length - data.length % results) / results) + 1 : data.length / results;
     for (let i = 1; i <= total; i++) {
-      pageTabs.push(<li key={"page_"+i} className="page-item" onClick={() => changePage(i, results)}><a className="page-link" href="#" key={i}>{i}</a></li>)
+      pageTabs.push(<li key={"page_"+i} className="page-item" onClick={() => changePage(i, results)}><a className="page-link" href="#" 
+  key={i}>{i}</a></li>)
     }
     return pageTabs;
   }
 
   const getSearchInputValue = (event) =>{
-
-      const userValue = event.target.value;
-      setsearchItem(userValue);
+      var arr=["alibaba", "aliexpress", "youtube","facebook","whatsapp","netflix","spider","roblox","amazon","hotmail","zoom",
+               "google","gmail","olympics","andrewCuomo","cute spider","godzilla vs kong","macy’s","bestbuy","macy",
+               "kohls","amc","Spider","cuba","ondrive","outlook","oops!","ooad","ooa","ooak",
+               "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone"]
+      const userValue = event.target.value; /*return the element that triggered the event*/
+      
       // console.log("Input", userValue);
+     /*function executed on text field field input*/
+      userValue.addEventListener("input", function(e) {
+         var divCreate,b,i,
+         fieldVal = this.value;
+         closeAllLists();
+         if (!fieldVal) 
+         {
+            return false;
+         }
+         currentFocus = -1;
+         /*DIV element for storing values*/
+
+         divCreate = document.createElement("DIV");
+         divCreate.setAttribute("id", this.id + "autocomplete-list");
+         divCreate.setAttribute("class", "autocomplete-items");
+         this.parentNode.appendChild(divCreate);
+         for (var x = 0; x <arr.length; ++) 
+         { /*check for elements that start with the same element as the target element*/
+            if ( arr[i].substr(0, fieldVal.length).toLowerCase() == fieldVal.toLowerCase() ) 
+            {
+              /*For every matching element create a DIV element and highlight the matching characters*/
+               b = document.createElement("DIV");
+               b.innerHTML = "<strong>" + arr[i].substr(0, fieldVal.length) + "</strong>";
+               b.innerHTML += arr[i].substr(fieldVal.length);
+               b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+               b.addEventListener("click", function(e) 
+                {
+                 /*complete the required statement or word when a suggestion is clicked*/
+                  userValue.value = this.getElementsByTagName("input")[0].value;
+                  closeAllLists();
+                });
+               divCreate.appendChild(b);
+            }
+         }
+      });
+    /*Choosing among the given suggestions using keyboard arrows*/
+    userValue.addEventListener("keydown", function(e) {
+         var autocomplete = document.getElementById(
+            this.id + "autocomplete-list"
+         );
+         if (autocomplete)
+            autocomplete = autocomplete.getElementsByTagName("div");
+         if (e.keyCode == 40) { /*Right arrow */
+            currentFocus++;
+            addActive(autocomplete);
+         }
+         else if (e.keyCode == 38) { /*Left arrow*/
+            currentFocus--;
+            addActive(autocomplete);
+         }
+         else if (e.keyCode == 13) { /*Enter*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+               if (autocomplete) autocomplete[currentFocus].click();
+            }
+         }
+      });
+    
+    function addActive(autocomplete) {
+         if (!autocomplete) 
+           return false;
+            removeActive(autocomplete);
+         if (currentFocus >= autocomplete.length) currentFocus = 0;
+         if (currentFocus < 0) currentFocus = autocomplete.length - 1;
+         autocomplete[currentFocus].classList.add("autocomplete-active");
+      }
+      function removeActive(autocomplete) {
+         for (var x = 0; x < autocomplete.length; x++) {
+            autocomplete[x].classList.remove("autocomplete-active");
+         }
+      }
+      function closeAllLists(elmnt) {
+         var autocomplete = document.getElementsByClassName(
+            "autocomplete-items"
+         );
+         for (var x = 0; x < autocomplete.length; x++) {
+            if (elmnt != autocomplete[x] && elmnt != userValue) {
+               autocomplete[x].parentNode.removeChild(autocomplete[x]);
+            }
+         }
+      }
+      document.addEventListener("click", function(e) {
+         closeAllLists(e.target);
+      });
+    
   };
 
   return (
