@@ -2,7 +2,6 @@ import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchResultList from './components/SearchResultList';
 import { useEffect, useState } from 'react';
-import { getDefaultNormalizer } from '@testing-library/react';
 const axios = require("axios")
 
 
@@ -82,16 +81,16 @@ function App() {
                "google","gmail","olympics","andrewCuomo","cute spider","godzilla vs kong","macy’s","bestbuy","macy",
                "kohls","amc","Spider","cuba","ondrive","outlook","oops!","ooad","ooa","ooak",
                "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone"]
-      // const userValue = event.target.value; /*return the element that triggered the event*/
-      const userValue = event.target;
+
+      const userValue = event.target; /*return the element that triggered the event*/
       var currentFocus = -1;
-      
+      setsearchItem(event.target.value);
       
      /*function executed when input changes*/
       userValue.addEventListener("input", function(e) {
          var divCreate,b,i,
          fieldVal = this.value;
-        //  console.log("Input", fieldVal);
+
          closeAllLists();
          if (!fieldVal) 
          {
@@ -100,19 +99,16 @@ function App() {
          }
          
          /*DIV element for storing values*/
-         
-        //  divCreate = document.createElement("div");
-        //  divCreate.setAttribute("id", this.id + "autocomplete-list");
-        //  divCreate.setAttribute("class", "autocomplete-items");
-        //  this.parentNode.appendChild(divCreate);
 
          var rowCreate = document.createElement("div")
          rowCreate.setAttribute("class","row")
-        //  rowCreate.style.zIndex = 4;
+         rowCreate.style.position = "absolute";
+         rowCreate.style.zIndex = 7;
+
          var divCreate = document.createElement("div")
          divCreate.setAttribute("id", this.id + "autocomplete-list");
          divCreate.setAttribute("class","col-md-6 autocomplete-items")
-
+         divCreate.style.width = "100%"
          rowCreate.appendChild(divCreate)
 
          this.parentNode.parentNode.appendChild(rowCreate); // We want col-md-6 mt-4 as the parent 
@@ -126,6 +122,9 @@ function App() {
                b.innerHTML = "<strong>" + arr[i].substr(0, fieldVal.length) + "</strong>";
                b.innerHTML += arr[i].substr(fieldVal.length);
                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+              //  b.position = "relative"
+               b.setAttribute("class","autocomplete")
+               
                b.addEventListener("click", function(e) 
                 {
                  /*complete the required statement or word when a suggestion is clicked*/
@@ -147,12 +146,10 @@ function App() {
           }
          if (e.keyCode == 40) { /*Down arrow */
             currentFocus++;
-            console.log("Down",currentFocus)
             addActive(autocomplete);
          }
          else if (e.keyCode == 38) { /*Up arrow*/
             currentFocus--;
-            console.log("Up",currentFocus)
             addActive(autocomplete);
          }
          else if (e.keyCode == 13) { /*Enter*/
@@ -160,7 +157,9 @@ function App() {
             if (currentFocus > -1) {
                if (autocomplete) {
                  autocomplete[currentFocus].click();
-                 console.log(currentFocus)
+                 var focusedValue = autocomplete[currentFocus].children[1].value
+                 setsearchItem(event.target.value);
+                 
                }
             }
          }
@@ -172,11 +171,13 @@ function App() {
          removeActive(autocomplete);
          if (currentFocus >= autocomplete.length) currentFocus = 0;
          if (currentFocus < 0) currentFocus = autocomplete.length - 1;
+         autocomplete[currentFocus].classList.remove("autocomplete");
          autocomplete[currentFocus].classList.add("autocomplete-active");
       }
       function removeActive(autocomplete) {
          for (var x = 0; x < autocomplete.length; x++) {
-            autocomplete[x].classList.remove("autocomplete-active");
+            autocomplete[x].classList.remove("autocomplete-active")
+            autocomplete[x].classList.add("autocomplete");
          }
       }
       function closeAllLists(elmnt) {
@@ -220,11 +221,7 @@ function App() {
                   </div>
                   
                 </div>
-                {/* <div className="row">
-                  <div className="col-md-6" id="search-focusautocomplete-list">
-                    AKSHAY
-                  </div>
-                </div> */}
+
               </div>
               <div className="col-md-2 mt-4">
                   <div className="btn-group">
@@ -253,16 +250,18 @@ function App() {
                   </div>
             </div>
   </div>
+          
+          <div className="row" style={{"position":"relative","zIndex":"3"}}>
           <hr/>
-          <div className="row">
               <div className="col-md-1"></div>
               <div className="col-md-6" id="box">
                 <SearchResultList list={data.slice((page - 1) * results, (page * results) > data.length ? data.length : (page * results))} />
               </div>
                 <br/>
                 <br/>
+                <hr/>
                   </div>
-                  <hr/>
+                  
                   <div className="row">
                       <div className="col-md-1"></div>
                       <div className="col-md-6" id="box">

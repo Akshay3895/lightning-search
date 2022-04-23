@@ -90,7 +90,7 @@ recordRoutes.route("/record").get(function (req, res) {
     
     let searchquery = req.body.searchquery;
     let db_connect = dbo.getDb("main");
-
+    console.log(searchquery)
     if (searchquery != null) {
         searchquery = searchquery.toLowerCase();
         
@@ -119,7 +119,7 @@ recordRoutes.route("/record").get(function (req, res) {
                 result_from_db = await result_from_db.toArray();
 
                 if (result_from_db.length !=0) {
-                    
+                    console.log("Results present in DB")
                     let documents = result_from_db[0]["documents"]
                     documents = await joinURLDocuments(db_connect,documents)
                     
