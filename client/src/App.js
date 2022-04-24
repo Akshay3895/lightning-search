@@ -38,18 +38,7 @@ function App() {
 
     
       }).catch(console.log)
-    // Can be used for testing the frontend
-    // fetch('output.json', {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Accept': 'application/json'
-    //   }
-    // })
-    // .then(result => result.json())
-    // .then((urls) => {
-    //   setData(urls);
-    // })
-    // .catch(console.log)
+
   };
 
   const changeResultCount = (rc) => {
@@ -86,7 +75,8 @@ function App() {
       var arr=["alibaba", "aliexpress", "youtube","facebook","whatsapp","netflix","spider","roblox","amazon","hotmail","zoom",
                "google","gmail","olympics","andrewCuomo","cute spider","godzilla vs kong","macy’s","bestbuy","macy",
                "kohls","amc","Spider","cuba","ondrive","outlook","oops!","ooad","ooa","ooak",
-               "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone"]
+               "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone","usa","ukraine",
+               "usps","ups","uk"]
 
       const userValue = event.target; /*return the element that triggered the event*/
       var currentFocus = -1;
