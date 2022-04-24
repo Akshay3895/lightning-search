@@ -45,7 +45,7 @@ function applyOperations(documents,operations){
         else if (operation === "or")
             results = results.concat(documents[i+1])
         else if (operation === "not")
-            results = results.filter(a => !list2.some(b => a.userId === b.userId));  
+            results = results.filter(a => !documents[i+1].some(b => b.address === a.address));  
     }
 
     return results
@@ -102,6 +102,9 @@ recordRoutes.route("/record").get(function (req, res) {
         // Filter ONLY the words
         tokenized = tokenized.filter(word => (word!="and") && (word!="or") && (word!="not"))
         
+        // If no operations have been mentioned consider as sentence
+        if (operations.length===0)
+            tokenized = [tokenized.join(" ")]
         
         let token_documents = []
         const forLooptokens = async(_)=> {
@@ -174,9 +177,11 @@ recordRoutes.route("/record").get(function (req, res) {
             }
             return token_documents
         }
-        token_documents  = await forLooptokens();
 
-        let finalresult = applyOperations(token_documents,operations);
+        token_documents  = await forLooptokens();
+        var finalresult = token_documents[0];
+        if (token_documents.length !== 0)
+            finalresult = applyOperations(token_documents,operations);
         
         // console.log("-----------------")
         console.log(`Final result Length = ${finalresult.length}`)

@@ -11,6 +11,7 @@ function App() {
   var [page, setPage] = useState(1);
   var [results, setResults] = useState(10);
   var [searchItem, setsearchItem] = useState("");
+  var [responseTime, setResponseTime] = useState("");
 
   const changeSortOrder = (sortOrder) => {
     let urls = data;
@@ -26,10 +27,15 @@ function App() {
   };
 
   const getData = () => {
-    
+    var callAPITime = (new Date()).getTime();
     axios.post('http://localhost:5000/search/',{searchquery:searchItem}).then(response =>{
           console.log(response.data)
           setData(response.data);
+
+          var responseTime_ = (new Date()).getTime();
+          var responseTimeMs = (responseTime_ - callAPITime)/1000;
+          setResponseTime(`About ${(response.data).length} results (${responseTimeMs} seconds) `);
+
     
       }).catch(console.log)
     // Can be used for testing the frontend
@@ -253,6 +259,9 @@ function App() {
           
           <div className="row" style={{"position":"relative","zIndex":"3"}}>
           <hr/>
+              <div className="row" style={{"fontSize":"11px"}}>
+                {responseTime}
+              </div>
               <div className="col-md-1"></div>
               <div className="col-md-6" id="box">
                 <SearchResultList list={data.slice((page - 1) * results, (page * results) > data.length ? data.length : (page * results))} />
