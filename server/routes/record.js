@@ -142,7 +142,7 @@ recordRoutes.route("/record").get(function (req, res) {
                             temp_data.push(...google_result)
                             
                             // Data to be pushed into URLs collection
-                            url_list = temp_data.map(searchresult => searchresult.address)
+                            url_list = google_result.map(searchresult => searchresult.address)
 
                             var dateTime = helperFunctions.getCurrentTime();
 

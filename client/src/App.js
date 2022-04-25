@@ -73,8 +73,9 @@ function App() {
 
   const getSearchInputValue = (event) =>{
       var arr=["alibaba", "aliexpress", "youtube","facebook","whatsapp","netflix","spider","roblox","amazon","hotmail","zoom",
-               "google","gmail","olympics","andrewCuomo","cute spider","godzilla vs kong","macy’s","bestbuy","macy",
-               "kohls","amc","Spider","cuba","ondrive","outlook","oops!","ooad","ooa","ooak",
+               "google","gmail","olympics","andrewCuomo","cute spider","godzilla vs kong","macys","bestbuy","macy",
+               "kohls","amc","Spider","spiderman","cuba","cnn","craiglist","chase","chickfila","capitalone",
+               "onedrive","outlook","oops!","ooad","ooa","ooak","dallas","dallas mavericks","zoo","zillow","zara",
                "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone","usa","ukraine",
                "usps","ups","uk"]
 
