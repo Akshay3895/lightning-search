@@ -103,6 +103,8 @@ recordRoutes.route("/record").get(function (req, res) {
         tokenized = tokenized.filter(word => (word!="and") && (word!="or") && (word!="not"))
         
         // If no operations have been mentioned consider as sentence
+        console.log(operations)
+        console.log(tokenized)
         if (operations.length===0)
             tokenized = [tokenized.join(" ")]
         

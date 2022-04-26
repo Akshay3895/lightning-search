@@ -155,7 +155,7 @@ function App() {
                if (autocomplete) {
                  autocomplete[currentFocus].click();
                  var focusedValue = autocomplete[currentFocus].children[1].value
-                 setsearchItem(event.target.value);
+                 setsearchItem(focusedValue);
                  
                }
             }
