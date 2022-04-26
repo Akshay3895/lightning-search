@@ -10,6 +10,16 @@ export default class SearchResultList extends Component {
           axios.get('http://localhost:5000/updateurl/',{params: {address: url }}).then(response =>{
           console.log(response.data)
           
+          // To update the url information without having to refresh page 
+          let newArr = this.props.currdata.map(obj => {
+            if (obj.address === url) {
+              return {...obj, timesVisited: obj.timesVisited+1, lastVisited:response.data["lastVisited"]};
+            }
+          
+            return obj;
+          });
+          this.props.currfunc([...newArr])
+          
       });
     }
     

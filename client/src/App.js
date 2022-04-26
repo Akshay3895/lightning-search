@@ -77,7 +77,7 @@ function App() {
                "kohls","amc","Spider","spiderman","cuba","cnn","craiglist","chase","chickfila","capitalone",
                "onedrive","outlook","oops!","ooad","ooa","ooak","dallas","dallas mavericks","zoo","zillow","zara",
                "ooama","oats","utd","apple","airbnb","apartments","alert","orange","otama","oden","ball","bone","usa","ukraine",
-               "usps","ups","uk"]
+               "usps","ups","uk","tesla","twitter"]
 
       const userValue = event.target; /*return the element that triggered the event*/
       var currentFocus = -1;
@@ -255,7 +255,8 @@ function App() {
               </div>
               <div className="col-md-1"></div>
               <div className="col-md-6" id="box">
-                <SearchResultList list={data.slice((page - 1) * results, (page * results) > data.length ? data.length : (page * results))} />
+                <SearchResultList list={data.slice((page - 1) * results, (page * results) > data.length ? data.length : (page * results))} 
+                                        currdata={data} currfunc={setData}/>
               </div>
                 <br/>
                 <br/>

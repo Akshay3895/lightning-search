@@ -70,7 +70,7 @@ recordRoutes.route("/updateurl").get(async function (req, res) {
     
     const result = await db_connect.collection("urls").updateOne(filter, updateDoc);
     
-    res.json("Updated");
+    res.json({"message":"Updataed","lastVisited":dateTime});
 });
 
 recordRoutes.route("/record").get(function (req, res) {
